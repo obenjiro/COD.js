@@ -1,0 +1,9 @@
+.item {
+    padding: 20px;
+    margin: 10px;
+    background: skyblue;
+}
+
+.item__selected {
+    background: red;
+}

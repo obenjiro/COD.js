@@ -1,0 +1,127 @@
+{
+  "coverage": "3.57%",
+  "expectCount": 56,
+  "actualCount": 2,
+  "files": {
+    "src/app/helpers/fetch.js": {
+      "expectCount": 6,
+      "actualCount": 2,
+      "undocumentLines": [
+        57,
+        59,
+        60,
+        58
+      ]
+    },
+    "src/app/helpers/jsonview.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        7,
+        5
+      ]
+    },
+    "src/app/main/index.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        9,
+        8,
+        10,
+        12,
+        11
+      ]
+    },
+    "src/app/main/controller.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        7,
+        10
+      ]
+    },
+    "src/app/main/view-d3.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        6,
+        7,
+        31,
+        10,
+        8
+      ]
+    },
+    "src/app/main/store.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        7
+      ]
+    },
+    "src/app/main/view-json.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        5,
+        6,
+        7
+      ]
+    },
+    "src/app/main/viewmodel.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        6,
+        4,
+        14,
+        8,
+        5
+      ]
+    },
+    "src/app/helpers/noopview.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        7
+      ]
+    },
+    "src/app/helpers/observer.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        20,
+        5,
+        12
+      ]
+    },
+    "src/app/helpers/simplepromise.js": {
+      "expectCount": 11,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        4,
+        31,
+        3,
+        18,
+        13,
+        6,
+        8,
+        5,
+        23
+      ]
+    }
+  }
+}

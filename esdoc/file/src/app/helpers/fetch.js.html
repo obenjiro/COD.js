@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/app/helpers/fetch.js | COD.js example API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/app/helpers/jsonview.js~JsonView.html">JsonView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/index.js~Main.html">Main</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/controller.js~MainController.html">MainController</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/view-d3.js~MainD3View.html">MainD3View</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/store.js~MainStore.html">MainStore</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/view-json.js~MainView.html">MainView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/viewmodel.js~MainViewModel.html">MainViewModel</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/noopview.js~NoopView.html">NoopView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/observer.js~Observer.html">Observer</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/simplepromise.js~SimplePromise.html">SimplePromise</a></span></li>
+</ul>
+</div>
+
+<div data-ice="interfaceWrap">
+  <h2>Interface</h2>
+  <ul>
+    
+  <li data-ice="interfaceDoc"><span><a href="class/src/app/helpers/fetch.js~FetchResponse.html">FetchResponse</a></span></li>
+</ul>
+</div>
+
+<div data-ice="functionWrap">
+  <h2><a href="function/">Function</a></h2>
+  <ul>
+    
+  <li data-ice="functionDoc"><span><a href="function/index.html#static-function-fetch">fetch</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/app/helpers/fetch.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import SimplePromise from &apos;./simplepromise.js&apos;
+
+/**
+ * Simplest fetch polyfill that returns {@link SimplePromise} witch resolves into {@link FetchResponse}
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/GlobalFetch/fetch
+ * @param {String} url - target url
+ * @param {{method: String, async: boolean, timeout: Number}} [options] - options that will configure request
+ * @return {SimplePromise} returns a SimplePromise
+ *
+ * @example
+ * fetch(&apos;/data&apos;).then((response) =&gt; {
+ *     this.viewmodel.update(response.data);
+ * }).fail((error) =&gt; {
+ *     this.viewmodel.show_notification(error);
+ * })
+ */
+export default function fetch(url, {method = &apos;GET&apos;, async = true, timeout = 10000} = {}) {
+    var promise = new SimplePromise();
+
+    // since we don&apos;t need to support legacy browsers we will use
+    // standard XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url, async);
+    xhr.timeout = timeout;
+    xhr.onreadystatechange = () =&gt; {
+        if (xhr.readyState === xhr.DONE) {
+            if ([200, 201].indexOf(xhr.status) &gt; -1) {
+                promise.resolve(new FetchResponse({
+                    status: xhr.status,
+                    data: _processResponse(xhr)
+                }));
+            } else {
+                promise.reject(new FetchResponse({
+                    status: xhr.status,
+                    error: _processResponse(xhr)
+                }));
+            }
+        }
+    };
+    xhr.ontimeout = () =&gt; {
+        promise.reject(new FetchResponse({
+            status: xhr.status,
+            error: &apos;Request Timeout&apos;
+        }));
+    };
+    xhr.send();
+
+    return promise;
+}
+
+/**
+ * Fetch response object
+ * @interface
+ */
+export class FetchResponse {
+    constructor({status, data, error}) {
+        this.status = status;
+        this.data = data;
+        this.error = error;
+    }
+}
+
+/**
+ * Process responseText and returned parsed or raw content depending on options.responseType
+ *
+ * @private
+ * @param {XMLHttpRequest} xhr - native xhr object
+ * @return {*} returns response data
+ */
+function _processResponse(xhr) {
+    var contentType = xhr.getResponseHeader(&apos;Content-Type&apos;) || &apos;&apos;;
+    var match = contentType.match(/\w+\/(\w+)/) || [];
+    var type = match[1];
+    if (type === &apos;json&apos;) {
+        return JSON.parse(xhr.responseText);
+    }
+    return xhr.responseText;
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.2.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

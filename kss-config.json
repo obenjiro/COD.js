@@ -1,0 +1,17 @@
+{
+    "//": "The source and destination paths are relative to this file.",
+    "source": [
+        "public/src"
+    ],
+    "destination":  "styleguide/",
+
+    "title": "COD.js Style Guide",
+    "homepage": "../../styleguide/homepage.md",
+    "template": "styleguide/template",
+
+    "//": "The css and js paths are URLs relative to the generated style guide.",
+    "css": [
+        "../public/build/bundle.css"
+    ],
+    "js": []
+}

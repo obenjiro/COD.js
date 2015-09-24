@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/app/helpers/angularish.js | COD.js example API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div data-ice="classWrap">
+  <h2>Class</h2>
+  <ul>
+    
+  <li data-ice="classDoc"><span><a href="class/src/app/helpers/angularishview.js~AngularishView.html">AngularishView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/jsonview.js~JsonView.html">JsonView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/index.js~Main.html">Main</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/controller.js~MainController.html">MainController</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/view-d3.js~MainD3View.html">MainD3View</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/store.js~MainStore.html">MainStore</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/view-json.js~MainView.html">MainView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/main/viewmodel.js~MainViewModel.html">MainViewModel</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/noopview.js~NoopView.html">NoopView</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/observer.js~Observer.html">Observer</a></span></li>
+<li data-ice="classDoc"><span><a href="class/src/app/helpers/simplepromise.js~SimplePromise.html">SimplePromise</a></span></li>
+</ul>
+</div>
+
+<div data-ice="interfaceWrap">
+  <h2>Interface</h2>
+  <ul>
+    
+  <li data-ice="interfaceDoc"><span><a href="class/src/app/helpers/fetch.js~FetchResponse.html">FetchResponse</a></span></li>
+</ul>
+</div>
+
+<div data-ice="functionWrap">
+  <h2><a href="function/">Function</a></h2>
+  <ul>
+    
+  <li data-ice="functionDoc"><span><a href="function/index.html#static-function-angularish">angularish</a></span></li>
+<li data-ice="functionDoc"><span><a href="function/index.html#static-function-fetch">fetch</a></span></li>
+</ul>
+</div>
+
+
+
+
+
+
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/app/helpers/angularish.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Simplest possible template in AngularJs-ISH style
+ *
+ * @param {String} template - template string
+ * @param {Object} ctx - template context
+ * @param {Object} eventHandlerObject - object that will be used as &quot;this&quot; in event handling
+ * @returns {Node} returns dom node element
+ */
+export default function angularish(template, ctx, eventHandlerObject) {
+    var node;
+    var container = document.createElement(&apos;div&apos;);
+
+    container.innerHTML = template;
+
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, null, false);
+    while (node = walker.nextNode()) {
+
+        // inheritance of context
+        node.ctx = node.ctx || node.parentNode.ctx || ctx;
+
+        // ng-scope allows you to change scope of the node (new scope can be any property of old scope)
+        if (node.getAttribute(&apos;ng-scope&apos;)) {
+
+            node.ctx = _getValue(node.ctx, node.getAttribute(&apos;ng-scope&apos;));
+
+        }
+        // ng-loop will repeat first child (TODO: reapeat content) and assign correct context
+        if (node.getAttribute(&apos;ng-loop&apos;)) {
+
+            var child = node.children[0];
+            var array = _getValue(node.ctx, node.getAttribute(&apos;ng-loop&apos;)) || [];
+            node.removeChild(child);
+            array.forEach((item) =&gt; {
+                child = child.cloneNode(true);
+                child.ctx = item;
+                node.appendChild(child);
+            });
+
+        }
+        // ng-value will assign value to node
+        if (node.getAttribute(&apos;ng-value&apos;)) {
+
+            node.value = _getValue(node.ctx, node.getAttribute(&apos;ng-value&apos;));
+
+        }
+        // ng-selected will set selected attribute depending on true-finess of value
+        if (node.getAttribute(&apos;ng-selected&apos;)) {
+
+            var selected = _getValue(node.ctx, node.getAttribute(&apos;ng-selected&apos;));
+            if (selected) {
+                node.setAttribute(&apos;selected&apos;, &apos;yes&apos;);
+            }
+
+        }
+        // ng-text will assign text to node no need for escaping
+        if (node.getAttribute(&apos;ng-text&apos;)) {
+
+            node.innerText = _getValue(node.ctx, node.getAttribute(&apos;ng-text&apos;));
+
+        }
+        // ng-class will simply assign class from defined property
+        if (node.getAttribute(&apos;ng-class&apos;)) {
+
+            var classVal = _getValue(node.ctx, node.getAttribute(&apos;ng-class&apos;));
+            if (classVal) {
+                node.className += &apos; &apos; + classVal;
+            }
+
+        }
+        // ng-show shows elements depending on true-finess of the value
+        if (node.getAttribute(&apos;ng-show&apos;)) {
+
+            var isVisible = _getValue(node.ctx, node.getAttribute(&apos;ng-show&apos;));
+            if (!isVisible) {
+                node.style.display = &apos;none&apos;;
+            }
+
+        }
+        // ng-hide shows elements depending on false-iness of the value
+        if (node.getAttribute(&apos;ng-hide&apos;)) {
+
+            var isHidden = _getValue(node.ctx, node.getAttribute(&apos;ng-hide&apos;));
+            if (isHidden) {
+                node.style.display = &apos;none&apos;;
+            }
+
+        }
+        // ng-change will add &quot;change&quot; event handler
+        if (node.getAttribute(&apos;ng-change&apos;)) {
+            // closure to rescue
+            ((node)=&gt; {
+                node.addEventListener(&apos;change&apos;, (event) =&gt; {
+                    eventHandlerObject[node.getAttribute(&apos;ng-change&apos;)].bind(eventHandlerObject)(node.ctx, event);
+                }, true);
+            })(node);
+        }
+        // ng-click will add &quot;click&quot; event handler
+        if (node.getAttribute(&apos;ng-click&apos;)) {
+            // closure to rescue
+            ((node)=&gt; {
+                node.addEventListener(&apos;click&apos;, (event) =&gt; {
+                    eventHandlerObject[node.getAttribute(&apos;ng-click&apos;)].bind(eventHandlerObject)(node.ctx, event);
+                }, true);
+            })(node);
+        }
+    }
+
+    return container;
+}
+
+function _getValue(ctx, attrVal) {
+    if (attrVal === &apos;self&apos;) {
+        return ctx;
+    }
+
+    return ctx[attrVal];
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.2.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "source": "./public/src",
+  "destination": "./esdoc",
+  "index": "./esdoc/README.md",
+  "title": "COD.js example"
+}
