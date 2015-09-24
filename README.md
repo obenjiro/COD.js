@@ -1,6 +1,6 @@
 # COD.js
 
-Welcome! :) Try to enjoy first implementation of desing pattern MALEVICH
+Welcome! :) Try to enjoy first "official" implementation of desing pattern MALEVICH
 
 ### Quick Start
 ```sh
