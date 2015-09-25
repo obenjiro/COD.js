@@ -1,4 +1,6 @@
 # COD.js
+
+[![Join the chat at https://gitter.im/aiboy/COD.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aiboy/COD.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![untitasled](https://cloud.githubusercontent.com/assets/1760346/10108226/62fcbc58-63c8-11e5-9a14-b3e7e9487002.png)
 
 Welcome! :) Try to enjoy first "official" implementation of desing pattern MALEVICH
