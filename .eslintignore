@@ -1,0 +1,10 @@
+node_modules/**
+.idea/**
+public/build/**/*
+public/src/bundle.js
+routes/**
+templates/**
+esdoc/**
+styleguide/**
+config/**
+*.js

@@ -3,7 +3,7 @@ import Observer from './../helpers/observer.js'
 
 export default class MainD3View extends Observer {
     init() {
-        this.stage = d3.select('body');
+        this.stage = d3.select('body').append('div');
     }
     onUpdate(data) {
         var awroles = this.stage.selectAll('div')

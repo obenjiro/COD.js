@@ -15,6 +15,6 @@ export default class JsonView extends Observer {
             element.className = this.viewName;
             document.body.appendChild(element);
         }
-        element.innerHTML = '<pre><h3>' + this.viewName + '</h3><br>' + JSON.stringify(data, null, 4);
+        element.innerHTML = '<pre><h3>' + this.viewName + '</h3><br>' + JSON.stringify(data, null, 4) + '</pre>';
     }
 }

@@ -5,13 +5,18 @@ export default class Observer {
     subscribe(event, target, callbackName) {
         var callback = target[callbackName].bind(target);
         if (__DEV__) {
-            console.log('subscribeing to event "', event, '" of observer: ', this.constructor.name);
+            console.info(
+                '[#] ' + target.constructor.name + '.' + callbackName +
+                ' <- subscribing to event <<' + event + '>>  of observer: ' + this.constructor.name
+            );
         }
-        this._subscribtionList.push({ event, callback });
+        this._subscribtionList.push({ event, callback, name: target.constructor.name, callbackName });
     }
     unsubscribe(event, callback) {
         if (__DEV__) {
-            console.log('unsubscribeing of event "', event, '" of observer: ', this.constructor.name);
+            console.log(
+                '[#] unsubscribe from event <<' + event + '>> of observer: ', this.constructor.name
+            );
         }
         this._subscribtionList = this._subscribtionList.filter((subscribtion) => {
             return (subscribtion.event !== event && subscribtion.callback !== callback);
@@ -19,15 +24,30 @@ export default class Observer {
     }
     fire(event, ...args) {
         if (__DEV__) {
-            console.log('firing event "', event, '" with args: ', JSON.stringify(args));
+            var isEvents = false;
+            console.log(
+                '[#] %c' + this.constructor.name, 'color: blue',
+                ' firing event <<' + event + '>> with args: ', JSON.stringify(args)
+            );
         }
         this._subscribtionList.forEach((subscribtion) => {
             if (subscribtion.event === event) {
                 if (__DEV__) {
-                    console.log('found event "', event, '" handler - calling callback');
+                    isEvents = true;
+                    console.log(
+                        '[#] ' + this.constructor.name + ' found event handler for <<' + event + '>> - calling %c' +
+                        subscribtion.name + '.' + subscribtion.callbackName, 'color:green'
+                    );
                 }
                 subscribtion.callback.apply(this, args);
             }
         });
+        if (__DEV__) {
+            if (!isEvents) {
+                console.warn(
+                    '[#] ' + this.constructor.name + ' not found any handlers for event <<' + event + '>> - nothing to call'
+                );
+            }
+        }
     }
 }
