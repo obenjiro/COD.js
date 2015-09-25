@@ -1,5 +1,6 @@
 # COD.js
 ![untitasled](https://cloud.githubusercontent.com/assets/1760346/10108226/62fcbc58-63c8-11e5-9a14-b3e7e9487002.png)
+
 Welcome! :) Try to enjoy first "official" implementation of desing pattern MALEVICH
 
 ### Quick Start
